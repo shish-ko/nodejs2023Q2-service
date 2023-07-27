@@ -4,14 +4,7 @@ import { UpdatePasswordDto } from 'src/user/dto/update-user.dto';
 import { v4 as uuid, validate } from 'uuid';
 import { DBStorage } from './dbStorage';
 import { User } from 'src/user/entities/User';
-
-type Idb = {
-  users: DBStorage<User>;
-  artists: Artist[];
-  tracks: Track[];
-  albums: Album[];
-  favorites: Favorites[];
-};
+import { Artist } from 'src/artist/entities/artist.entity';
 
 const dbBootstrap: User[] = [
   {
@@ -35,17 +28,17 @@ const dbBootstrap: User[] = [
 @Injectable()
 export class DBservice {
   users: DBStorage<User>;
-  artists: Artist[];
+  artists: DBStorage<Artist>;
   tracks: DBStorage<Track>;
-  albums: Album[];
-  favorites: Favorites[];
+  albums: DBStorage<Album>;
+  favorites: DBStorage<Favorites>;
 
   constructor() {
     this.users = new DBStorage<User>();
-    this.artists = [];
+    this.artists = new DBStorage<Artist>();
     this.tracks = new DBStorage<Track>();
-    this.albums = [];
-    this.favorites = [];
+    this.albums = new DBStorage<Album>();
+    this.favorites = new DBStorage<Favorites>(); // TODO replace types after adding all modules
     // for (const user of dbBootstrap) {
     //   this.users.create(user);
     // }

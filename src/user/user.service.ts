@@ -3,7 +3,6 @@ import { DBservice } from 'src/dataBase/db.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER, User } from './entities/User';
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { validate } from 'uuid';
 import { getUniqueItem } from 'src/utils';
 
 Injectable();
@@ -30,7 +29,6 @@ export class UserService {
   }
   getAllUsers() {
     const users = this.db.users.findMany();
-    console.log(users)
     return users.map((user) => {
       delete user.password;
       return user;

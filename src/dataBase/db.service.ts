@@ -36,14 +36,14 @@ const dbBootstrap: User[] = [
 export class DBservice {
   users: DBStorage<User>;
   artists: Artist[];
-  tracks: Track[];
+  tracks: DBStorage<Track>;
   albums: Album[];
   favorites: Favorites[];
 
   constructor() {
     this.users = new DBStorage<User>();
     this.artists = [];
-    this.tracks = [];
+    this.tracks = new DBStorage<Track>();
     this.albums = [];
     this.favorites = [];
     // for (const user of dbBootstrap) {

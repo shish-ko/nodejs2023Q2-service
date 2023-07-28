@@ -16,6 +16,9 @@ export class TrackService {
         .find((artist) => artist.id === dto.artistId)
         .addTrack(track);
     }
+    if (dto.albumId) {
+      this.db.albums.find((album) => album.id === dto.albumId).addTrack(track);
+    }
     return this.db.tracks.create(track);
   }
   getAllTracks() {

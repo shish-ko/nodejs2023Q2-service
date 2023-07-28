@@ -5,6 +5,8 @@ import { v4 as uuid, validate } from 'uuid';
 import { DBStorage } from './dbStorage';
 import { User } from 'src/user/entities/User';
 import { Artist } from 'src/artist/entities/artist.entity';
+import { Track } from 'src/track/entities/Track';
+import { Album } from 'src/albums/entities/album.entity';
 
 const dbBootstrap: User[] = [
   {
@@ -31,14 +33,14 @@ export class DBservice {
   artists: DBStorage<Artist>;
   tracks: DBStorage<Track>;
   albums: DBStorage<Album>;
-  favorites: DBStorage<Favorites>;
+  // favorites: DBStorage<Favorites>;
 
   constructor() {
     this.users = new DBStorage<User>();
     this.artists = new DBStorage<Artist>();
     this.tracks = new DBStorage<Track>();
     this.albums = new DBStorage<Album>();
-    this.favorites = new DBStorage<Favorites>(); // TODO replace types after adding all modules
+    // this.favorites = new DBStorage<Favorites>();
     // for (const user of dbBootstrap) {
     //   this.users.create(user);
     // }

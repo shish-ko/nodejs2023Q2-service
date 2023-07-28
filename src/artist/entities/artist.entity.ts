@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { CreateArtistDto } from '../dto/create-artist.dto';
 import { Album } from 'src/albums/entities/album.entity';
+import { Track } from 'src/track/entities/Track';
 
 export class Artist {
   id: string;
@@ -13,6 +14,7 @@ export class Artist {
     this.grammy = dto.grammy;
     this.name = dto.name;
     this.trackReferences = [];
+    this.albumReferences = [];
   }
   deleteReferences() {
     this.trackReferences.forEach((track) => (track.artistId = null));

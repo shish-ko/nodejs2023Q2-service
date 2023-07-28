@@ -1,26 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { DBservice } from 'src/dataBase/db.service';
+import { getUniqueItem } from 'src/utils';
+import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
-  create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
-  }
+  constructor(@Inject(DBservice) private db: DBservice) {}
 
-  findAll() {
-    return `This action returns all albums`;
+  addAlbum(dto: CreateAlbumDto) {
+    const album = new Album(dto);
+    if (dto.artistId) {
+      this.db.artists
+        .find((artist) => artist.id === dto.artistId)
+        .addAlbum(album);
+    }
+    return this.db.albums.create(album);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  getAllAlbums() {
+    return this.db.albums.findMany();
   }
-
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  getAlbum(id: string) {
+    return getUniqueItem(id, this.db.albums);
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  updateAlbum(id: string, dto: UpdateAlbumDto) {
+    getUniqueItem(id, this.db.albums);
+    return this.db.albums.update(id, Object.entries(dto));
+  }
+  deleteAlbum(id: string) {
+    getUniqueItem(id, this.db.albums);
+    return this.db.albums.delete(id);
   }
 }

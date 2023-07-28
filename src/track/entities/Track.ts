@@ -8,21 +8,11 @@ export class Track {
   albumId: string | null; // refers to Album
   duration: number; // in
   private artist?: Artist;
-  constructor(dto: CreateTrackDto, artist?: Artist) {
+  constructor(dto: CreateTrackDto) {
     this.id = uuid();
     this.name = dto.name;
     this.albumId = dto.albumId;
-    this.artistId = this.artist?.id;
     this.duration = dto.duration;
-    this.artist = artist;
+    this.artistId = dto.artistId;
   }
 }
-
-const artists = [new Artist({ name: 'Test', grammy: false })];
-const track = new Track(
-  { name: 'Track', duration: 123, artistId: null, albumId: null },
-  artists[0],
-);
-console.log(track);
-artists.length = 0;
-console.log(track);

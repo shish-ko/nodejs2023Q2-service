@@ -1,4 +1,4 @@
-type merge<T> = { id: string } & T;
+type merge<T> = { id: string } & T & Partial<{ deleteReferences: () => void }>;
 export class DBStorage<T> extends Array<merge<T>> {
   constructor() {
     super();
@@ -33,8 +33,20 @@ export class DBStorage<T> extends Array<merge<T>> {
     return { ...item };
   }
   delete(id: string) {
-    const itemNum = this.findIndex((item) => item.id === id);
-    this.splice(itemNum, 1);
+    let itemInd: number;
+    const item = this.find((i, ind) => {
+      if (i.id === id) {
+        itemInd = ind;
+        return true;
+      }
+    });
+    if (
+      'deleteReferences' in item &&
+      typeof item.deleteReferences === 'function'
+    ) {
+      item.deleteReferences();
+    }
+    this.splice(itemInd, 1);
     return true;
   }
 }

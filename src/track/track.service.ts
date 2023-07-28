@@ -11,6 +11,11 @@ export class TrackService {
 
   addTrack(dto: CreateTrackDto) {
     const track = new Track(dto);
+    if (dto.artistId) {
+      this.db.artists
+        .find((artist) => artist.id === dto.artistId)
+        .addTrack(track);
+    }
     return this.db.tracks.create(track);
   }
   getAllTracks() {

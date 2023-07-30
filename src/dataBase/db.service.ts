@@ -34,14 +34,14 @@ export class DBservice {
   artists: DBStorage<Artist>;
   tracks: DBStorage<Track>;
   albums: DBStorage<Album>;
-  favorites: DBStorage<Favorite>;
+  favorites: Favorite;
 
   constructor() {
     this.users = new DBStorage<User>();
     this.artists = new DBStorage<Artist>();
     this.tracks = new DBStorage<Track>();
     this.albums = new DBStorage<Album>();
-    this.favorites = new DBStorage<Favorite>();
+    this.favorites = new Favorite();
     // for (const user of dbBootstrap) {
     //   this.users.create(user);
     // }

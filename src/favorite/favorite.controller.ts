@@ -2,15 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
   Param,
   Delete,
-  HostParam
+  HttpException,
+  HttpCode,
 } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { FAVORITE } from './entities/favorite.entity';
 
 @Controller('favs')
 export class FavoriteController {
@@ -18,18 +16,23 @@ export class FavoriteController {
 
   @Post(':type/:id')
   create(@Param('id') id: string, @Param('type') type: string) {
-    return this.service.update(type, id);
+    if (!Object.values(FAVORITE).includes(type))
+      throw new HttpException('does not exist', 404);
+    return this.service.addFavs(type, id);
   }
 
   @Get()
   findAll() {
-    return this.service.findAll();
+    return this.service.getAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.favoriteService.findOne(+id);
-  // }
+  @Delete(':type/:id')
+  @HttpCode(204)
+  delete(@Param('id') id: string, @Param('type') type: string) {
+    if (!Object.values(FAVORITE).includes(type))
+      throw new HttpException('does not exist', 404);
+    return this.service.removeFavs(type, id);
+  }
 
   // @Patch(':id')
   // update(

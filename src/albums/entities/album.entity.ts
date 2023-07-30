@@ -7,18 +7,17 @@ export class Album {
   name: string;
   year: number;
   artistId: string | null;
-  private trackReferences: Track[];
+  #trackReferences: Track[] = [];
   constructor(dto: CreateAlbumDto) {
     this.id = uuid();
     this.name = dto.name;
     this.artistId = dto.artistId;
     this.year = dto.year;
-    this.trackReferences = [];
   }
   addTrack(track: Track) {
-    this.trackReferences.push(track);
+    this.#trackReferences.push(track);
   }
   deleteReferences() {
-    this.trackReferences.forEach((track) => (track.albumId = null));
+    this.#trackReferences.forEach((track) => (track.albumId = null));
   }
 }

@@ -3,11 +3,11 @@ export class DBStorage<T> extends Array<merge<T>> {
   constructor() {
     super();
   }
-  findMany(id?: string) {
-    if (id) {
+  findMany(idArr?: string[]) {
+    if (idArr) {
       const res = [];
       for (const item of this) {
-        if (item.id === id) res.push({ ...item });
+        if (idArr.includes(item.id)) res.push({ ...item });
       }
       return res;
     } else {

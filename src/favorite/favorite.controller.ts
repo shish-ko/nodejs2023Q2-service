@@ -33,17 +33,4 @@ export class FavoriteController {
       throw new HttpException('does not exist', 404);
     return this.service.removeFavs(type, id);
   }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateFavoriteDto: UpdateFavoriteDto,
-  // ) {
-  //   return this.favoriteService.update(+id, updateFavoriteDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.favoriteService.remove(+id);
-  // }
 }

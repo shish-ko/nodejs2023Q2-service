@@ -12,11 +12,13 @@ export class TrackService {
   addTrack(dto: CreateTrackDto) {
     const track = new Track(dto);
     if (dto.artistId) {
+      getUniqueItem(dto.artistId, this.db.artists);
       this.db.artists
         .find((artist) => artist.id === dto.artistId)
         .addTrack(track);
     }
     if (dto.albumId) {
+      getUniqueItem(dto.albumId, this.db.albums);
       this.db.albums.find((album) => album.id === dto.albumId).addTrack(track);
     }
     return this.db.tracks.create(track);

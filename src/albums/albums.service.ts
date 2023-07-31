@@ -12,6 +12,7 @@ export class AlbumsService {
   addAlbum(dto: CreateAlbumDto) {
     const album = new Album(dto);
     if (dto.artistId) {
+      getUniqueItem(dto.artistId, this.db.artists);
       this.db.artists
         .find((artist) => artist.id === dto.artistId)
         .addAlbum(album);

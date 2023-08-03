@@ -27,10 +27,10 @@ export class UserController {
   createUser(@Body() dto: CreateUserDto) {
     return this.service.addUser(dto);
   }
-  @Put(':id')
-  updateUser(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
-    return this.service.updateUser(id, dto);
-  }
+  // @Put(':id')
+  // updateUser(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
+  //   return this.service.updateUser(id, dto);
+  // }
   @Delete(':id')
   @HttpCode(204)
   deleteUser(@Param('id') id: string) {

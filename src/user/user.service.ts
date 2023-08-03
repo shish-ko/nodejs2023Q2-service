@@ -4,41 +4,36 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { USER, User } from './entities/User';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { getUniqueItem } from 'src/utils';
+import { Prisma } from '@prisma/client';
 
 Injectable();
 export class UserService {
   constructor(@Inject(DBservice) private db: DBservice) {}
-  addUser(dto: CreateUserDto) {
-    const user = this.db.users.create(new User(dto));
-    delete user.password;
+  async addUser(dto: CreateUserDto) {
+    const user = await this.db.user.create({ data: dto });
     return user;
   }
-  updateUser(id: string, dto: UpdatePasswordDto) {
-    const currentUser = getUniqueItem(id, this.db.users);
-    if (currentUser.password === dto.oldPassword) {
-      const user = this.db.users.update(id, [
-        [USER.PASSWORD, dto.newPassword],
-        [USER.VERSION, currentUser.version + 1],
-        [USER.UPDATEDAT, Date.now()],
-      ]);
-      delete user.password;
-      return user;
-    } else {
-      throw new HttpException('Invalid password', 403);
-    }
-  }
-  getAllUsers() {
-    const users = this.db.users.findMany();
+  // updateUser(id: string, dto: UpdatePasswordDto) {
+  //   const currentUser = getUniqueItem(id, this.db, Prisma.ModelName.User);
+  //   if (currentUser.password === dto.oldPassword) {
+  //     const user = this.db.user.update({where: {id}, data: {password: dto.newPassword, version: currentUser.}});
+  //     delete user.password;
+  //     return user;
+  //   } else {
+  //     throw new HttpException('Invalid password', 403);
+  //   }
+  // }
+  async getAllUsers() {
+    const users = await this.db.user.findMany();
     return users.map((user) => {
       delete user.password;
       return user;
     });
   }
-  getUser(id: string) {
-    return getUniqueItem(id, this.db.users);
+  async getUser(id: string) {
+    return await this.db.user.findUniqueOrThrow({ where: { id } });
   }
-  deleteUser(id: string) {
-    getUniqueItem(id, this.db.users);
-    return this.db.users.delete(id);
+  async deleteUser(id: string) {
+    return await this.db.user.delete({ where: { id } });
   }
 }

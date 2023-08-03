@@ -2,7 +2,6 @@ import { Injectable, Inject } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { DBservice } from 'src/dataBase/db.service';
-import { getUniqueItem } from 'src/utils';
 import { Album } from './entities/album.entity';
 
 @Injectable()
@@ -10,27 +9,18 @@ export class AlbumsService {
   constructor(@Inject(DBservice) private db: DBservice) {}
 
   addAlbum(dto: CreateAlbumDto) {
-    const album = new Album(dto);
-    if (dto.artistId) {
-      getUniqueItem(dto.artistId, this.db.artists);
-      this.db.artists
-        .find((artist) => artist.id === dto.artistId)
-        .addAlbum(album);
-    }
-    return this.db.albums.create(album);
+    return this.db.album.create({ data: dto });
   }
   getAllAlbums() {
-    return this.db.albums.findMany();
+    return this.db.album.findMany();
   }
   getAlbum(id: string) {
-    return getUniqueItem(id, this.db.albums);
+    return this.db.album.findUniqueOrThrow({ where: { id } });
   }
   updateAlbum(id: string, dto: UpdateAlbumDto) {
-    getUniqueItem(id, this.db.albums);
-    return this.db.albums.update(id, Object.entries(dto));
+    return this.db.album.update({ where: { id }, data: dto });
   }
   deleteAlbum(id: string) {
-    getUniqueItem(id, this.db.albums);
-    return this.db.albums.delete(id);
+    return this.db.album.delete({ where: { id } });
   }
 }

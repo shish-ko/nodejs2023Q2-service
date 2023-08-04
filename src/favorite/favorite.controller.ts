@@ -4,12 +4,10 @@ import {
   Post,
   Param,
   Delete,
-  HttpException,
   HttpCode,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
-import { FAVORITE } from './entities/favorite.entity';
 
 @Controller('favs')
 export class FavoriteController {

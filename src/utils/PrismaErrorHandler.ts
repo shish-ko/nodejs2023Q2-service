@@ -1,4 +1,9 @@
-import { ArgumentsHost, Catch, HttpStatus } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
 import { Response } from 'express';
@@ -10,8 +15,11 @@ export class PrismaErrorHandler extends BaseExceptionFilter {
     const response = ctx.getResponse<Response>();
     if (exception.code === 'P2025') {
       response.status(HttpStatus.NOT_FOUND).send();
+    } else if (exception.code === 'P2003') {
+      response.status(HttpStatus.UNPROCESSABLE_ENTITY).send();
     } else {
-      throw new Error('DB Error');
+      console.log(exception.code);
+      throw new HttpException('DB Error', 500);
     }
   }
 }

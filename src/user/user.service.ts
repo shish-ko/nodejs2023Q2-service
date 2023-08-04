@@ -1,9 +1,7 @@
 import { Injectable, HttpException, Inject } from '@nestjs/common';
 import { DBservice } from 'src/dataBase/db.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { USER, User } from './entities/User';
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { Prisma } from '@prisma/client';
 import { TransformedUser } from './entities/TransformedUser';
 
 Injectable();

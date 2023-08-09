@@ -17,6 +17,7 @@ async function bootstrap() {
   const config = parse(yamlConf);
   // const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, config, {});
-  await app.listen(4000);
+  await app.listen(process.env.PORT || 4000);
+  console.log(`app is running on ${process.env.PORT || 4000}`);
 }
 bootstrap();

@@ -1,20 +1,26 @@
 services:
   db:
     build: DB/    
-    # ports:
-    #  - "5432:5432"
     volumes:
       - db_vol:/var/lib/postgresql/data
+      - ./logs:/logs:z
     restart: always
+    networks:
+      - app_network
+    command: postgres -c port=$DB_PORT -c logging_collector=on -c log_destination=stderr -c log_directory=/logs
 
   app:
     build: ./
     ports:
       - "4000:4000"
-    #volumes:
-     # - .:/app
+    volumes:
+     - .:/app    
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - app_network
 volumes:
   db_vol:
+networks:
+  app_network:

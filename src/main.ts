@@ -1,7 +1,7 @@
 import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { parse } from 'yamljs';
@@ -18,6 +18,6 @@ async function bootstrap() {
   // const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, config, {});
   await app.listen(process.env.PORT || 4000);
-  console.log(`app is running on ${process.env.PORT || 4000}`);
+  console.log(`app is running on PORT ${process.env.PORT || 4000}`);
 }
 bootstrap();

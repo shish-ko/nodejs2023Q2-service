@@ -1,0 +1,2 @@
+FROM postgres
+EXPOSE $DB_PORT

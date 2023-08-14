@@ -15,7 +15,6 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaErrorHandler(httpAdapter));
   const yamlConf = await readFile(SWAGGERDOC, 'utf-8');
   const config = parse(yamlConf);
-  // const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, config, {});
   await app.listen(process.env.PORT || 4000);
   console.log(`app is running on PORT ${process.env.PORT || 4000}`);

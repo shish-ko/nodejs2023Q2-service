@@ -17,6 +17,10 @@ export class PrismaErrorHandler extends BaseExceptionFilter {
       response.status(HttpStatus.NOT_FOUND).send();
     } else if (exception.code === 'P2003') {
       response.status(HttpStatus.UNPROCESSABLE_ENTITY).send();
+    } else if (exception.code === 'P2002') {
+      response
+        .status(HttpStatus.BAD_REQUEST)
+        .send({ message: 'User already exists' });
     } else {
       console.log(exception.code);
       throw new HttpException('DB Error', 500);

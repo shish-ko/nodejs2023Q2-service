@@ -3,20 +3,26 @@ import { DBservice } from 'src/dataBase/db.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { TransformedUser } from './entities/TransformedUser';
+import * as bcrypt from 'bcryptjs';
+import { getHashedPassword } from 'src/utils';
 
 Injectable();
 export class UserService {
   constructor(@Inject(DBservice) private db: DBservice) {}
   async addUser(dto: CreateUserDto) {
-    const user = await this.db.user.create({ data: dto });
+    const hashedPassword = await getHashedPassword(dto.password);
+    const user = await this.db.user.create({
+      data: { login: dto.login, password: hashedPassword },
+    });
     return new TransformedUser(user);
   }
   async updateUser(id: string, dto: UpdatePasswordDto) {
     const currentUser = await this.db.user.findUniqueOrThrow({ where: { id } });
-    if (currentUser.password === dto.oldPassword) {
+    if (await bcrypt.compare(dto.oldPassword, currentUser.password)) {
+      const hashedPassword = await getHashedPassword(dto.newPassword);
       const user = await this.db.user.update({
         where: { id },
-        data: { password: dto.newPassword, version: currentUser.version + 1 },
+        data: { password: hashedPassword, version: currentUser.version + 1 },
       });
       return new TransformedUser(user);
     } else {

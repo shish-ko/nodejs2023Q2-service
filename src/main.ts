@@ -6,10 +6,11 @@ import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { parse } from 'yamljs';
 import { PrismaErrorHandler } from './utils/PrismaErrorHandler';
+import { AppLogger } from './logger/logger.service';
 
 const SWAGGERDOC = resolve(__dirname, '../doc/api.yaml');
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: new AppLogger() });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new PrismaErrorHandler(httpAdapter));

@@ -20,11 +20,9 @@ export class AuthMiddleware implements NestMiddleware {
       return res.status(HttpStatus.UNAUTHORIZED).send();
     }
     const token = req.headers.authorization.split(' ')[1];
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (error, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (error) => {
       if (error) throw new HttpException('Token has expired', 401);
       next();
     });
-    // console.log(payload);
-    // console.log(this.db.user.findMany());
   }
 }

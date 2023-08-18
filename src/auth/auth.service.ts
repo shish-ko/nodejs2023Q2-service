@@ -4,6 +4,7 @@ import { DBservice } from 'src/dataBase/db.service';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserService } from 'src/user/user.service';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,19 +17,47 @@ export class AuthService {
     return this.userService.addUser(dto);
   }
 
-  async login({ login, password }: CreateAuthDto) {
+  async login({ login: dtoLogin, password: dtoPassword }: CreateAuthDto) {
     try {
-      const user = await this.db.user.findUnique({ where: { login } });
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      const { id, password, login } = await this.db.user.findUnique({
+        where: { login: dtoLogin },
+      });
+      const isValidPassword = await bcrypt.compare(dtoPassword, password);
       if (!isValidPassword) throw new Error();
-      const accessToken = jwt.sign(
-        { userId: user.id, login: user.login },
-        process.env.JWT_SECRET_KEY,
-        { expiresIn: process.env.TOKEN_EXPIRE_TIME },
-      );
-      return { accessToken };
+      return this.getTokens(id, login);
     } catch {
       throw new HttpException('Authentication error', 403);
     }
+  }
+
+  refresh(dto: UpdateAuthDto) {
+    try {
+      const payload = jwt.verify(
+        dto.refreshToken,
+        process.env.JWT_SECRET_REFRESH_KEY,
+      );
+      if (
+        typeof payload === 'object' &&
+        'userId' in payload &&
+        'login' in payload
+      ) {
+        return this.getTokens(payload.userId, payload.login);
+      } else {
+        throw new Error();
+      }
+    } catch {}
+  }
+  getTokens(id: string, login: string) {
+    const accessToken = jwt.sign(
+      { userId: id, login: login },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: process.env.TOKEN_EXPIRE_TIME },
+    );
+    const refreshToken = jwt.sign(
+      { userId: id, login: login },
+      process.env.JWT_SECRET_REFRESH_KEY,
+      { expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME },
+    );
+    return { accessToken, refreshToken };
   }
 }

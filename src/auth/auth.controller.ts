@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Redirect, Inject } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refresh(@Body() createAuthDto: CreateAuthDto) {
-    // return this.authService.refresh(createAuthDto);
+  refresh(@Body() updateAuthDto: UpdateAuthDto) {
+    return this.authService.refresh(updateAuthDto);
   }
 }

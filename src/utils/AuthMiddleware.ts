@@ -6,12 +6,10 @@ import {
   NestMiddleware,
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { DBservice } from 'src/dataBase/db.service';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(@Inject(DBservice) private db: DBservice) {}
   use(req: Request, res: Response, next: NextFunction) {
     if (
       !req.headers.authorization ||

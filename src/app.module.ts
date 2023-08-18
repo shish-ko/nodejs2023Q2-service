@@ -28,7 +28,7 @@ export class AppModule implements NestModule {
       .apply(LoggerMiddleware)
       .forRoutes('*')
       .apply(AuthMiddleware)
-      .exclude('auth/signup', 'auth/login', '/api', '/')
+      .exclude('auth/signup', 'auth/login', '/doc', '/')
       .forRoutes('*');
   }
 }

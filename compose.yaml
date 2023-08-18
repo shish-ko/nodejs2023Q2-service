@@ -3,7 +3,7 @@ services:
     build: DB/    
     volumes:
       - db_storage:/var/lib/postgresql/data
-      - ./logs:/logs:z
+      - db_logs:/logs:z
     restart: always
     networks:
       - app_network
@@ -26,5 +26,6 @@ services:
       - app_network
 volumes:
   db_storage:
+  db_logs:
 networks:
   app_network:

@@ -13,7 +13,6 @@ const getTokenAndUserId = async (request) => {
     .post(authRoutes.signup)
     .set('Accept', 'application/json')
     .send(createUserDto);
-
   // get token
   const {
     body: { accessToken },
